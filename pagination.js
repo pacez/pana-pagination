@@ -12,16 +12,6 @@
 	pageObj= {
 		init: function(options){
 			var that=this;
-			/*
-			* options parameters:
-			* 	tpl: string, //指定视图模板url
-			* 	url: string, //指定接口url
-			*   dataViewId: string, //数据填充容器的id
-			*   id: string, //分页id,
-			*   totalPages: int, //总页数
-			*   isRenderData: boole, //是否直接渲染接口返回的data
-			*   simpleModel: boole, //是否仅显示prev & next按钮
-			*/
 			options = $.extend(true,{
 				id: 'pagearea',
 				dataViewId: 'dataView',
@@ -102,17 +92,11 @@
 
 			var callbacks={
 				success: function(data){
-					//解析数据
+					//parse data
 					if(typeof options.parse==="function"){
 						data=options.parse(data);
-					}else{
-						//默认解析为topiclist格式
-						for(var i=0; i<data.topicList.length; i++){
-							$.extend(data.topicList[i],data.creatorMap[data.topicList[i].id]);
-							data.topicList[i].href=Constant.urlConstant.getGroupTopicUrl(data.topicList[i].id);
-						}
 					}
-					//更新模板视图
+					//update view
 					that.updateView(data,options.isRenderData);
 				},
 				error: function(data){
@@ -122,25 +106,25 @@
 			$(document).on('click','#'+options.id,function(e){
 				var $elem=$(e.target);
 
+				//disable
 				if($elem.hasClass(options.currentClass) || $elem.hasClass('disabled')){
 					return;
 				}
-
-				//点击页码
+				//click page num
 				if($elem.hasClass(options.pageClass)){
 					that.currentElem=$elem;
 					that.updatePagebarView($elem);
 					//Site.api.pagination(that.getUrl($elem,options.url),that.getParam($elem),callbacks);
 					return;
 				}
-				//上一页
+				//prev page
 				if($elem.hasClass(options.prevClass)){
 					that.currentElem=$elem;
 					that.updatePagebarView($elem,-1);
 					//Site.api.pagination(that.getUrl($elem,options.url),that.getParam($elem),callbacks);
 					return
 				}
-				//下一页
+				//next page
 				if($elem.hasClass(options.nextClass)){
 					that.currentElem=$elem;
 					that.updatePagebarView($elem,1);
@@ -181,7 +165,7 @@
 			var that=this,html='';
 			html+='<div class="comment_network_tip loading-container">';
 	      html+='<i class="loading-l"></i>';
-	      html+='<p>加载中，请稍等</p>';
+	      html+='<p>加载中，请稍等!</p>';
 	    html+='</div>';
 	    that.getContainer().html(html);
 		},
