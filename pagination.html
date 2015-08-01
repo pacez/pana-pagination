@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>pagination</title>
+        <style type="text/css">
+           a {
+             border: 1px solid #ccc;
+             padding: 5px;
+             text-align: center;
+             display: inline-block;
+             margin: 5px;
+             width: 30px;
+           }
+           .current {
+              background-color: #f4f4f4;
+           }
+           .disabled {
+              background-color: #cecece;
+           }
+        </style>
+    </head>
+    <body>
+
+        <div id="dataView"></div>
+        <form>
+          <input type="hidden" name="pageNum" class="page-current" value="1" size="2" autocomplete="off"/>
+          <div id="pagination"></div>
+        </form>
+        <script src="jquery.js"></script>
+        <script src="pagination.js"></script>
+        <script type="text/javascript">
+          var page;
+          $(function(){
+            page=new pagination({
+              id: 'pagination',
+              dataViewId: 'dataView',
+              isRenderData: true,
+              totalPages: 6,
+              pageSize: 5
+            });
+          });
+        </script>
+    </body>
+</html>
