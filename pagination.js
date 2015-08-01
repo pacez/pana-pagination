@@ -2,7 +2,7 @@
 * Author: cdzhongpeizhi@jd.com
 * desc: pagination component for you.jd.com
 * update date: 2015-08-01
-* dependencies: jquery 1.8+
+* dependencies: jquery 1.8+, requirejs, mustache
 */
 
 (function(){
