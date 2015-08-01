@@ -1,7 +1,7 @@
 # pana-pagination
 pagination component
 
-## usage"
+## usage:
 ```javascript
 //初始化：
 var page=new pagination({
