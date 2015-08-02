@@ -5,7 +5,7 @@
 * dependencies: jquery 1.8+, requirejs, mustache
 */
 
-(function(){
+(function(window){
 	function pagination(options){
 		this.init(options);
 	}

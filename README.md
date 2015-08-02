@@ -12,8 +12,9 @@ var page=new pagination({
   id: string, //分页id,
   totalPages: int, //总页数
   isRenderData: boole, //是否直接渲染接口返回的data
-  simpleModel: boole //是否仅显示prev & next按钮
+  simpleModel: boole, //是否仅显示prev & next按钮
+  parse: fn(data) //解析接口返回在数据，使其符合模板数据结构要求 && 也可以指定渲染数据的属性
 });
 
 //选中页码:
-page.rendar(pageNum,totalPages) //totalPages缺省则读取init中设置的值
+page.rendar(pageNum,totalPages) //totalPages缺省值为init中设置的属性值
