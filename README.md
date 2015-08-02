@@ -1,6 +1,6 @@
 # pana-pagination
-京友邦分页控件，依赖requirejs, Mustache, jQuery 1.8+  <br/>
-该控件遵循系统现有依赖加载/通信接口/模板库规则。代码精简易扩展!
+京友邦分页控件，依赖Requirejs,Site,Mustache,jQuery 1.8+  <br/>
+遵循系统现有依赖加载/通信接口/模板库规则,代码精简易扩展!
 
 ## usage:
 ```javascript
