@@ -103,7 +103,7 @@
 					that.showError(data.errorMsg);
 				}
 			};
-			$(document).on('click','#'+options.id,function(e){
+			$(document).on('click.pagination','#'+options.id,function(e){
 				var $elem=$(e.target);
 
 				//disable
