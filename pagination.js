@@ -9,6 +9,7 @@
 	function pagination(options){
 		this.init(options);
 	}
+
 	pageObj= {
 		init: function(options){
 			var that=this;
@@ -22,7 +23,8 @@
 				nextClass: "next-page",
 				pageClass: "page-num",
 				pageNumClass: 'page-current',
-				currentClass: 'current'
+				currentClass: 'current',
+				pageareaClass: 'pagination-container'
 			},options);
 			that.options=options;
 			that.loadTpl();
@@ -40,10 +42,16 @@
 		},
 		render: function(currentPage,totalPages){
 			var options=this.options,
-					pageSize=options.pageSize,
+					totalPages= parseInt(totalPages ? totalPages : options.totalPages);
+
+			if(totalPages<=1){
+				return;
+			}
+
+			var pageSize=options.pageSize,
 					deviator=Math.floor(pageSize/2),
 					currentPage=parseInt(currentPage,10),
-					totalPages= totalPages ? totalPages : options.totalPages,
+					$pagination=$("#"+options.id),
 					htmlArr=[];
 
 			if(currentPage==1){
@@ -76,15 +84,21 @@
 				return false;
 			}
 
-			if(isShowCtrBtn()) htmlArr.push('<a class="'+options.prevClass+disabledClass+'" href="javascript:void(0)">Prev</a>');
+			if(isShowCtrBtn()) htmlArr.push('<a class="page-btn '+options.prevClass+disabledClass+'" href="javascript:void(0)">&lt;</a>');
 				if(!options.simpleModel){
 					for(var i=startIndex; i<endIndex; i++){
-						htmlArr.push('<a data-page="'+i+'" class="'+options.pageClass+(currentPage==i ? ' '+options.currentClass: '')+'" href="javascript:void(0)">'+i+'</a>');
+						htmlArr.push('<a data-page="'+i+'" class="page-btn '+options.pageClass+(currentPage==i ? ' '+options.currentClass: '')+'" href="javascript:void(0)">'+i+'</a>');
 					}
 				}
-			if(isShowCtrBtn()) htmlArr.push('<a class="'+options.nextClass+endDisabledClass+'" href="javascript:void(0)">Next</a>');
+			if(isShowCtrBtn()) htmlArr.push('<a class="page-btn '+options.nextClass+endDisabledClass+'" href="javascript:void(0)">&gt;</a>');
 
-			$("#"+options.id).html(htmlArr.join(''));
+			var $pageForm=$pagination.children('form'),
+					$pagearea=$pagination.find("."+options.pageareaClass);
+			if($pagearea.length==0){
+				$pageForm.append('<div class="'+options.pageareaClass+'"></div>');
+				var $pagearea=$pagination.find("."+options.pageareaClass);
+			}
+			$pagearea.html(htmlArr.join(''));
 		},
 		event: function(){
 			var that=this,
@@ -100,7 +114,7 @@
 					that.updateView(data,options.isRenderData);
 				},
 				error: function(data){
-					that.showError(data.errorMsg);
+					//that.showError(data.errorMsg);
 				}
 			};
 			$(document).on('click.pagination','#'+options.id,function(e){
@@ -114,21 +128,21 @@
 				if($elem.hasClass(options.pageClass)){
 					that.currentElem=$elem;
 					that.updatePagebarView($elem);
-					//Site.api.pagination(that.getUrl($elem,options.url),that.getParam($elem),callbacks);
+					Site.api.pagination(that.getUrl($elem,options.url),that.getParam($elem),callbacks);
 					return;
 				}
 				//prev page
 				if($elem.hasClass(options.prevClass)){
 					that.currentElem=$elem;
 					that.updatePagebarView($elem,-1);
-					//Site.api.pagination(that.getUrl($elem,options.url),that.getParam($elem),callbacks);
+					Site.api.pagination(that.getUrl($elem,options.url),that.getParam($elem),callbacks);
 					return
 				}
 				//next page
 				if($elem.hasClass(options.nextClass)){
 					that.currentElem=$elem;
 					that.updatePagebarView($elem,1);
-					//Site.api.pagination(that.getUrl($elem,options.url),that.getParam($elem),callbacks);
+					Site.api.pagination(that.getUrl($elem,options.url),that.getParam($elem),callbacks);
 					return
 				}
 			});
@@ -150,7 +164,7 @@
 					var pageNum=parseInt(that.getPageNum()+1);
 					break;
 				default:
-					var pageNum=$elem.attr("data-page");
+					var pageNum=parseInt($elem.attr("data-page"));
 					break;
 			}
 
@@ -182,7 +196,7 @@
 			that.getContainer().html(Mustache.render(that.tpl,data));
 		},
 		getPageContainer: function(){
-			return this.currentElem.closest('#'+this.options.id).parent('form');
+			return this.currentElem.closest('#'+this.options.id).children('form');
 		},
 		getPageNum: function(){
 			var options=this.options;
@@ -192,9 +206,10 @@
 			return $('#'+this.options.dataViewId);
 		},
 		getParam: function($elem) {
-			return $elem.closest("form").serializeArray();
+			return $("#"+this.options.id).children("form").serializeArray();
 		}
-	}
+	};
+
 	$.extend(pagination.prototype,pageObj);
 
 	// Expose pagination to the global object
